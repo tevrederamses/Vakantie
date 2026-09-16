@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Turkije – Inpakchecklist</title>
+<style>
+  :root { --bg:#f5f6f8; --card:#fff; --text:#17202a; --muted:#68707a; --accent:#2563eb; --line:#e5e7eb; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif; background:var(--bg); color:var(--text); }
+  .wrap { max-width:720px; margin:auto; padding:20px 14px 40px; }
+  header { background:var(--card); border-radius:18px; padding:20px; margin-bottom:14px; box-shadow:0 2px 10px #0000000d; }
+  h1 { margin:0 0 6px; font-size:25px; }
+  .sub { color:var(--muted); margin-bottom:16px; }
+  .bar { height:10px; background:#e9edf2; border-radius:99px; overflow:hidden; }
+  #progress { height:100%; width:0; background:var(--accent); transition:.2s; }
+  .stats { display:flex; justify-content:space-between; margin-top:8px; color:var(--muted); font-size:14px; }
+  section { background:var(--card); border-radius:16px; padding:8px 14px; margin:12px 0; box-shadow:0 2px 8px #00000008; }
+  h2 { font-size:18px; margin:10px 4px; }
+  label { display:flex; align-items:flex-start; gap:12px; padding:12px 4px; border-top:1px solid var(--line); cursor:pointer; }
+  label:first-of-type { border-top:0; }
+  input { width:21px; height:21px; margin:0; accent-color:var(--accent); flex:none; }
+  input:checked + span { text-decoration:line-through; color:#8a9199; }
+  .actions { display:flex; gap:8px; margin-top:14px; }
+  button { flex:1; border:0; border-radius:12px; padding:12px; font-weight:700; cursor:pointer; background:#e9edf2; color:var(--text); }
+  button.primary { background:var(--accent); color:white; }
+  .tip { margin-top:14px; padding:13px; border-radius:12px; background:#eef5ff; font-size:14px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <h1>🇹🇷 Turkije – Inpakchecklist</h1>
+  <div class="sub">Vink af wat je al hebt ingepakt. Je voortgang wordt automatisch bewaard.</div>
+  <div class="bar"><div id="progress"></div></div>
+  <div class="stats"><span id="count">0 / 0</span><span id="percent">0%</span></div>
+  <div class="actions">
+    <button class="primary" onclick="window.print()">Printen</button>
+    <button onclick="resetAll()">Alles opnieuw</button>
+  </div>
+</header>
+
+<div style="text-align:center;margin:-4px 0 14px;">
+  <a href="index.html" style="color:#2563eb;text-decoration:none;font-size:14px;">← Terug naar aftelklok</a>
+</div>
+
+<div id="list"></div>
+
+<div class="tip"><strong>✈️ Handbagage:</strong> paspoort/ID, telefoon, oplader, powerbank, medicijnen, portemonnee/bankpassen en eventueel een setje kleding horen bij voorkeur in je handbagage.</div>
+</div>
+
+<script>
+const groups = {
+"🛂 Belangrijkste spullen": [
+"Paspoort/ID-kaart + foto/kopie ervan","Vliegtickets/boardingpass","Hotel/reserveringsgegevens",
+"Rijbewijs als je een auto gaat huren","Reisverzekeringgegevens","Bankpas + eventueel creditcard","Wat contant geld (€) voor noodgevallen"
+],
+"🔌 Elektronica": [
+"Telefoon + oplader","Powerbank","Oordopjes","Eventueel smartwatch + oplader",
+"Stekkeradapter (normaal niet nodig vanuit Nederland)"
+],
+"☀️ Zon & strand": [
+"Zonnebrand","Zonnebril","Pet/hoed","Zwembroek/badpak","Strandslippers","Strandtas",
+"Eventueel waterschoenen","After-sun/aloe vera"
+],
+"👕 Kleding": [
+"Ondergoed en sokken","Pyjama","Iets met lange mouwen voor een koele avond/airco",
+"Lange broek","Comfortabele schoenen/sandalen","Extra zwemkleding","Waszak voor vuile kleding"
+],
+"🧴 Toiletartikelen": [
+"Tandenborstel + tandpasta","Deodorant","Scheermes","Shampoo/douchegel","Haarproducten",
+"Nagelknipper","Lenzen + vloeistof/bril als je die gebruikt","Lippenbalsem met SPF"
+],
+"💊 Kleine EHBO": [
+"Eigen medicijnen","Paracetamol","Pleisters","Middel tegen diarree","ORS","Eventueel middel tegen reisziekte"
+],
+"✈️ Handbagage": [
+"Paspoort/ID","Telefoon + oplader","Powerbank","Medicijnen","Portemonnee/bankpassen",
+"Zonnebril","Een setje ondergoed + shirt","Tandenborstel","Belangrijke documenten",
+"Eventueel een leeg flesje dat je na de security kunt vullen"
+]
+};
+
+const key="turkije-checklist-v1";
+let saved=JSON.parse(localStorage.getItem(key)||"{}");
+const list=document.getElementById("list");
+let n=0;
+for(const [group,items] of Object.entries(groups)){
+  const section=document.createElement("section");
+  section.innerHTML=`<h2>${group}</h2>`;
+  items.forEach(item=>{
+    const id="i"+n++;
+    const label=document.createElement("label");
+    label.innerHTML=`<input type="checkbox" id="${id}" ${saved[id]?"checked":""}><span>${item}</span>`;
+    label.querySelector("input").addEventListener("change",e=>{
+      saved[id]=e.target.checked; localStorage.setItem(key,JSON.stringify(saved)); update();
+    });
+    section.appendChild(label);
+  });
+  list.appendChild(section);
+}
+function update(){
+ const boxes=[...document.querySelectorAll('input[type=checkbox]')];
+ const done=boxes.filter(x=>x.checked).length, total=boxes.length;
+ const pct=Math.round(done/total*100);
+ document.getElementById("count").textContent=`${done} / ${total}`;
+ document.getElementById("percent").textContent=`${pct}%`;
+ document.getElementById("progress").style.width=pct+"%";
+}
+function resetAll(){
+ if(confirm("Alles afgevinkt terugzetten?")){
+   saved={}; localStorage.removeItem(key);
+   document.querySelectorAll('input[type=checkbox]').forEach(x=>x.checked=false);
+   update();
+ }
+}
+update();
+</script>
+</body>
+</html>
