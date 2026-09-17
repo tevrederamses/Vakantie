@@ -81,14 +81,35 @@
     font-size: clamp(20px, 6vw, 28px);
     font-weight: 700;
   }
-  .gallery-link {
-    display: inline-block;
-    margin-top: 20px;
-    color: white;
-    text-decoration: underline;
-    font-size: clamp(13px, 3.5vw, 16px);
-    opacity: 0.95;
+  .nav-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 28px;
   }
+  .nav-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 14px 10px;
+    background: rgba(255,255,255,0.14);
+    backdrop-filter: blur(6px);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 14px;
+    color: white;
+    text-decoration: none;
+    font-size: clamp(12px, 3vw, 13.5px);
+    font-weight: 600;
+    transition: background 0.15s ease, transform 0.15s ease;
+  }
+  .nav-btn:hover, .nav-btn:active {
+    background: rgba(255,255,255,0.26);
+    transform: translateY(-1px);
+  }
+  .nav-btn .emoji { font-size: 20px; }
+  .nav-btn.wide { grid-column: 1 / -1; }
 </style>
 </head>
 <body>
@@ -99,17 +120,11 @@
       <div class="sub">Vertrek 18 september 2026 · 10:25 vanaf Eindhoven</div>
       <div class="timer" id="timer"></div>
       <div class="footer" id="footer">Dream World Hill · All inclusive · 9 dagen</div>
-      <div>
-        <a class="gallery-link" href="https://dreamworldhill.com.tr/en/gallery" target="_blank" rel="noopener">Bekijk foto's van het hotel →</a>
-      </div>
-      <div>
-        <a class="gallery-link" href="inpakchecklist.html">📋 Inpakchecklist</a>
-      </div>
-      <div>
-        <a class="gallery-link" href="omgeving.html">🗺️ Side & omgeving</a>
-      </div>
-      <div>
-        <a class="gallery-link" href="reisgegevens.html">📄 Reisgegevens</a>
+      <div class="nav-buttons">
+        <a class="nav-btn" href="inpakchecklist.html"><span class="emoji">📋</span>Inpakchecklist</a>
+        <a class="nav-btn" href="omgeving.html"><span class="emoji">🗺️</span>Side &amp; omgeving</a>
+        <a class="nav-btn" href="reisgegevens.html"><span class="emoji">📄</span>Reisgegevens</a>
+        <a class="nav-btn" href="https://dreamworldhill.com.tr/en/gallery" target="_blank" rel="noopener"><span class="emoji">🏖️</span>Hotelfoto's</a>
       </div>
     </div>
   </div>
