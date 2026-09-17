@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Side & omgeving — Uitjes en info</title>
+<style>
+  :root {
+    --bg: #f3f6f8;
+    --card: #ffffff;
+    --text: #17202a;
+    --muted: #5c6772;
+    --accent: #0093E9;
+    --accent-dark: #0072b8;
+    --line: #e5e9ed;
+    --item-text: #333c45;
+    --note-bg: #fff8e6;
+    --note-text: #6b5600;
+    --note-blue-bg: #eef5ff;
+    --note-blue-text: #0a3d66;
+    --tag-bg: #eef5ff;
+    --shadow: rgba(0,0,0,0.06);
+  }
+  html[data-theme="dark"] {
+    --bg: #12161b;
+    --card: #1c2128;
+    --text: #e7ebef;
+    --muted: #9aa4ae;
+    --accent: #4db8ff;
+    --accent-dark: #7cc9ff;
+    --line: #2c333b;
+    --item-text: #c9d1d9;
+    --note-bg: #3a2f10;
+    --note-text: #f0d78a;
+    --note-blue-bg: #17293a;
+    --note-blue-text: #a9d4ff;
+    --tag-bg: #17293a;
+    --shadow: rgba(0,0,0,0.35);
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    color: var(--text);
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+  .hero {
+    position: relative;
+    padding: 40px 20px 34px;
+    text-align: center;
+    color: white;
+    background:
+      linear-gradient(180deg, rgba(0,40,60,0.55) 0%, rgba(0,40,60,0.8) 100%),
+      url('https://dreamworldhill.com.tr/assets/images/Dream_World_Hill_Family_Club_Beach_2.webp') center center / cover no-repeat;
+  }
+  .hero h1 {
+    margin: 0 0 6px;
+    font-size: clamp(22px, 6vw, 32px);
+  }
+  .hero p {
+    margin: 0;
+    opacity: 0.92;
+    font-size: clamp(13px, 3.5vw, 15px);
+  }
+  .nav {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 16px;
+    flex-wrap: wrap;
+  }
+  .nav a {
+    color: white;
+    text-decoration: underline;
+    font-size: 14px;
+    opacity: 0.95;
+  }
+  .wrap {
+    max-width: 720px;
+    margin: -18px auto 0;
+    padding: 0 14px 50px;
+    position: relative;
+  }
+
+  details {
+    background: var(--card);
+    border-radius: 16px;
+    margin: 10px 0;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.06);
+    overflow: hidden;
+  }
+  summary {
+    list-style: none;
+    cursor: pointer;
+    padding: 16px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    font-weight: 700;
+    font-size: 16px;
+    -webkit-tap-highlight-color: transparent;
+  }
+  summary::-webkit-details-marker { display: none; }
+  summary .icon { font-size: 19px; }
+  summary .title { flex: 1; display:flex; align-items:center; gap:10px; }
+  summary .chev {
+    color: var(--muted);
+    font-size: 14px;
+    transition: transform 0.2s ease;
+    flex: none;
+  }
+  details[open] summary .chev { transform: rotate(180deg); }
+  details[open] summary { border-bottom: 1px solid var(--line); }
+
+  .body {
+    padding: 4px 18px 14px;
+  }
+  .item {
+    border-top: 1px solid var(--line);
+    padding: 12px 0;
+  }
+  .item:first-of-type { border-top: 0; }
+  .item h3 {
+    margin: 0 0 4px;
+    font-size: 15.5px;
+  }
+  .item p {
+    margin: 0 0 6px;
+    font-size: 14.5px;
+    line-height: 1.55;
+    color: var(--item-text);
+  }
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 6px;
+  }
+  .tag {
+    background: var(--tag-bg);
+    color: var(--accent-dark);
+    font-size: 12.5px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 99px;
+  }
+  .note {
+    margin: 10px 0;
+    padding: 12px 13px;
+    border-radius: 12px;
+    background: var(--note-bg);
+    font-size: 13.5px;
+    line-height: 1.5;
+    color: var(--note-text);
+  }
+  .note.blue { background: var(--note-blue-bg); color: var(--note-blue-text); }
+  .theme-toggle {
+    position: fixed;
+    top: 14px;
+    right: 14px;
+    z-index: 10;
+    background: rgba(255,255,255,0.18);
+    backdrop-filter: blur(6px);
+    border: none;
+    color: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    -webkit-tap-highlight-color: transparent;
+  }
+  a.link {
+    color: var(--accent-dark);
+    font-weight: 600;
+    text-decoration: none;
+  }
+  a.link:hover { text-decoration: underline; }
+  .backlink {
+    display: block;
+    text-align: center;
+    margin: 20px 0 10px;
+    color: var(--accent-dark);
+    text-decoration: none;
+    font-size: 14px;
+  }
+  .footnote {
+    max-width: 720px;
+    margin: 6px auto 0;
+    font-size: 13px;
+  }
+</style>
+</head>
+<body>
+
+<button class="theme-toggle" id="themeToggle" aria-label="Wissel donker/licht" onclick="toggleTheme()">🌙</button>
+
+<div class="hero">
+  <h1>🇹🇷 Side & omgeving</h1>
+  <p>Praktische info, uitjes en bezienswaardigheden rond Dream World Hill</p>
+  <div class="nav">
+    <a href="index.html">⏱ Aftelklok</a>
+    <a href="inpakchecklist.html">📋 Inpakchecklist</a>
+    <a href="reisgegevens.html">📄 Reisgegevens</a>
+  </div>
+</div>
+
+<div class="wrap">
+
+<details>
+  <summary>
+    <span class="title"><span class="icon">🏖️</span> Het strand</span>
+    <span class="chev">▾</span>
+  </summary>
+  <div class="body">
+    <div class="item">
+      <h3>Strand bij Dream World Hill / Titreyengöl</h3>
+      <p>Fijn zandstrand direct bij het hotel, meestal met ligbedden en parasols voor gasten. Rustig genoeg voor een ontspannen dag.</p>
+      <p><a class="link" href="https://www.google.com/search?q=Titreyeng%C3%B6l+strand+Side" target="_blank" rel="noopener">Zoek op Google</a></p>
+    </div>
+    <div class="item">
+      <h3>Kumköy Beach</h3>
+      <p>Breed zandstrand iets ten westen van het oude centrum van Side, populair bij toeristen, met watersporten (jetski, parasailing, bananenboot) en strandtenten.</p>
+      <p><a class="link" href="https://www.google.com/search?q=Kumk%C3%B6y+Beach+Side+Turkije" target="_blank" rel="noopener">Zoek op Google</a></p>
+    </div>
+    <div class="item">
+      <h3>Side centrum-strand (bij de Tempel van Apollo)</h3>
+      <p>Kleiner strand direct bij de ruïnes op het schiereiland — minder comfort, meer sfeer: zwemmen met uitzicht op de zuilen van de Apollotempel, vooral mooi bij zonsondergang.</p>
+      <p><a class="link" href="https://en.wikipedia.org/wiki/Side,_Turkey" target="_blank" rel="noopener">Wikipedia — Side</a></p>
+    </div>
+    <div class="item">
+      <h3>Çolaklı / Kızılot Beach</h3>
+      <p>Rustiger, minder drukke stranden iets verder naar het westen, geliefd bij mensen die iets minder toeristendrukte willen.</p>
+      <p><a class="link" href="https://www.google.com/search?q=%C3%87olakl%C4%B1+K%C4%B1z%C4%B1lot+Beach+Turkije" target="_blank" rel="noopener">Zoek op Google</a></p>
+    </div>
+  </div>
+</details>
+
+<details>
+  <summary>
+    <span class="title"><span class="icon">💦</span> Waterpark & pretpark</span>
+    <span class="chev">▾</span>
+  </summary>
+  <div class="body">
+    <div class="item">
+      <h3>The Land of Legends (Kingdom & Waterpark)</h3>
+      <p>Grootste attractiepark van Turkije: achtbanen, een Nickelodeon-gedeelte, en een uitgebreid waterpark met glijbanen en een golfslagbad. Ligt bij Kadriye/Belek, richting Antalya.</p>
+      <div class="meta">
+        <span class="tag">± 45–60 min rijden</span>
+        <span class="tag">Pretpark + waterpark</span>
+      </div>
+      <p><a class="link" href="https://www.thelandoflegends.com/en" target="_blank" rel="noopener">thelandoflegends.com</a></p>
+    </div>
+    <div class="note blue">
+      Veel reisorganisaties (o.a. Sunmix/Prijsvrij, of lokale reisbureaus in Side) bieden een dagtrip met transfer naar Land of Legends aan. Check bij de excursiebalie in het hotel voor actuele prijzen en vertrektijden.
+    </div>
+  </div>
+</details>
+
+<details>
+  <summary>
+    <span class="title"><span class="icon">🏊</span> Zwembaden van andere hotels</span>
+    <span class="chev">▾</span>
+  </summary>
+  <div class="body">
+    <div class="item">
+      <h3>Dream World Aqua</h3>
+      <p>Zusterhotel van jullie eigen Dream World Hill (zelfde hotelgroep), gevestigd in Evrenseki met een groot aquapark met meer dan 10 glijbanen. Waarschijnlijk de dichtstbijzijnde optie — de moeite waard om bij jullie eigen receptie te vragen of er toegang/regelingen mogelijk zijn tussen de zusterhotels.</p>
+      <p><a class="link" href="https://dreamworldaqua.com.tr/en/" target="_blank" rel="noopener">dreamworldaqua.com.tr</a></p>
+    </div>
+    <div class="item">
+      <h3>AQI Pegasos World</h3>
+      <p>Gelegen in Titreyengöl/Sorgun, vlak bij Side. Een van de grootste zwemoppervlaktes van de regio: een buitenbad van 9.600 m² gecombineerd met 13 glijbanen op nog eens 7.500 m².</p>
+      <p><a class="link" href="https://www.tthotels.com/en/hotel/aqi-pegasos-world" target="_blank" rel="noopener">tthotels.com — AQI Pegasos World</a></p>
+    </div>
+    <div class="item">
+      <h3>SPLASHWORLD Ali Bey Club &amp; Park</h3>
+      <p>Bij Manavgat, zo'n 12–17 km van Side. Een van de grootste aquaparks van Turkije/Europa: 25.000 m², 5–6 zwembaden, 25 glijbanen (waaronder Space Bowl, Black Hole, Kamikaze) en een wildwaterbaan.</p>
+      <div class="meta"><span class="tag">± 12–17 km van Side</span></div>
+      <p><a class="link" href="https://www.alibey.com/en" target="_blank" rel="noopener">alibey.com — Ali Bey Hotels & Resorts</a></p>
+    </div>
+    <div class="item">
+      <h3>Arcanus Hotels Sorgun</h3>
+      <p>In Sorgun, dicht bij Side. Groot buitenzwembad (ca. 1200 m²) plus een apart glijbanenbad met 7 glijbanen.</p>
+      <p><a class="link" href="https://arcanushotelssorgun.com/en-US" target="_blank" rel="noopener">arcanushotelssorgun.com</a></p>
+    </div>
+    <div class="note">
+      Of (en tegen welke prijs) niet-gasten een dagpas kunnen kopen, verschilt per hotel en seizoen — dat wordt niet altijd vooraf online vermeld. Vraag dit het beste rechtstreeks aan bij de receptie van het hotel zelf, of via de excursiebalie van jullie eigen hotel.
+    </div>
+  </div>
+</details>
+
+<details>
+  <summary>
+    <span class="title"><span class="icon">🏛️</span> Verdere bezienswaardigheden</span>
+    <span class="chev">▾</span>
+  </summary>
+  <div class="body">
+    <div class="item">
+      <h3>Oude stad van Side</h3>
+      <p>Sfeervol havenstadje op een schiereiland, met de Tempel van Apollo aan het water, een antiek theater en Romeinse ruïnes middenin het centrum.</p>
+      <p><a class="link" href="https://en.wikipedia.org/wiki/Side,_Turkey" target="_blank" rel="noopener">Wikipedia — Side</a></p>
+    </div>
+    <div class="item">
+      <h3>Aspendos — Romeins theater</h3>
+      <p>Een van de best bewaarde Romeinse theaters ter wereld, nog steeds in gebruik voor voorstellingen.</p>
+      <div class="meta"><span class="tag">± 30–40 min rijden</span></div>
+      <p><a class="link" href="https://en.wikipedia.org/wiki/Aspendos" target="_blank" rel="noopener">Wikipedia — Aspendos</a></p>
+    </div>
+    <div class="item">
+      <h3>Manavgat-waterval & boottocht</h3>
+      <p>Vrij toegankelijke waterval net buiten Manavgat, vaak gecombineerd met een boottochtje op de rivier.</p>
+      <p><a class="link" href="https://en.wikipedia.org/wiki/Manavgat_Waterfall" target="_blank" rel="noopener">Wikipedia — Manavgat-waterval</a></p>
+    </div>
+    <div class="item">
+      <h3>Manavgat-markt</h3>
+      <p>Grote lokale markt in Manavgat (traditioneel op maandag) — kruiden, textiel, leer en lokale producten.</p>
+      <p><a class="link" href="https://www.google.com/search?q=Manavgat+markt+maandag" target="_blank" rel="noopener">Zoek op Google</a></p>
+    </div>
+    <div class="item">
+      <h3>Alanya (dagtrip)</h3>
+      <p>Indrukwekkend kasteel op de landtong, gezellige jachthaven en boottochten langs grotten.</p>
+      <div class="meta"><span class="tag">± 45–60 min rijden</span></div>
+      <p><a class="link" href="https://en.wikipedia.org/wiki/Alanya" target="_blank" rel="noopener">Wikipedia — Alanya</a></p>
+    </div>
+    <div class="item">
+      <h3>Antalya (Kaleiçi, oude stad)</h3>
+      <p>Historische oude binnenstad met smalle straatjes, de Yivli-minaret, oude haven en winkelstraten.</p>
+      <div class="meta"><span class="tag">± 1–1,5 uur rijden</span></div>
+      <p><a class="link" href="https://en.wikipedia.org/wiki/Kalei%C3%A7i" target="_blank" rel="noopener">Wikipedia — Kaleiçi</a></p>
+    </div>
+  </div>
+</details>
+
+<details>
+  <summary>
+    <span class="title"><span class="icon">🎟️</span> Georganiseerde excursies</span>
+    <span class="chev">▾</span>
+  </summary>
+  <div class="body">
+    <div class="item">
+      <h3>Waar boek je ze?</h3>
+      <p>Drie manieren, met verschillende prijs/gemak-verhouding: (1) via de excursiebalie van jullie hotel — makkelijkst, vaak iets duurder; (2) via een lokaal reisbureau in Side/Evrenseki zelf — vaak goedkoper, wel even prijzen vergelijken; (3) online vooraf via een platform als GetYourGuide of Viator — handig als je op vaste data wilt plannen en vooraf recensies wilt lezen.</p>
+      <p><a class="link" href="https://www.getyourguide.com/side-l144/" target="_blank" rel="noopener">GetYourGuide — excursies in Side</a></p>
+    </div>
+    <div class="item">
+      <h3>Pamukkale (hele dag)</h3>
+      <p>De beroemde witte kalkterrassen en de Romeinse ruïnes van Hierapolis. Favoriet, maar wel een lange dag: al snel 12-14 uur inclusief heen- en terugreis vanaf Side.</p>
+      <div class="meta"><span class="tag">Hele dag, ± 4-5 uur reizen enkele reis</span></div>
+      <p><a class="link" href="https://en.wikipedia.org/wiki/Pamukkale" target="_blank" rel="noopener">Wikipedia — Pamukkale</a></p>
+    </div>
+    <div class="item">
+      <h3>Jeep safari</h3>
+      <p>Tocht met open jeeps door de bergdorpen en het Taurusgebergte achter Side, vaak met een stop bij een lokaal dorp en een modderbad/zwemstop.</p>
+      <p><a class="link" href="https://www.google.com/search?q=jeep+safari+excursie+Side+Turkije" target="_blank" rel="noopener">Zoek op Google</a></p>
+    </div>
+    <div class="item">
+      <h3>Rafting & canyoning (Köprülü Canyon)</h3>
+      <p>Populaire actieve dagtrip: raften op de rivier door de kloof, soms gecombineerd met canyoning. Ook leuk te combineren met een jeep safari op dezelfde dag.</p>
+      <p><a class="link" href="https://en.wikipedia.org/wiki/K%C3%B6pr%C3%BCl%C3%BC_Canyon_National_Park" target="_blank" rel="noopener">Wikipedia — Köprülü Canyon</a></p>
+    </div>
+    <div class="item">
+      <h3>Boottochten (Green Canyon / kustlijn Side)</h3>
+      <p>Rustiger alternatief: een boottocht over de Green Canyon (met zwemstops) of een boottocht langs de kust van Side zelf, vaak met lunch aan boord.</p>
+      <p><a class="link" href="https://www.google.com/search?q=Green+Canyon+boottocht+excursie+Side" target="_blank" rel="noopener">Zoek op Google</a></p>
+    </div>
+    <div class="item">
+      <h3>Alanya dagtrip</h3>
+      <p>Vaak als excursie te boeken i.p.v. zelf te regelen: bezoek aan het kasteel/burcht, de grotten per boot en de jachthaven.</p>
+      <p><a class="link" href="https://www.google.com/search?q=Alanya+dagtrip+excursie+vanaf+Side" target="_blank" rel="noopener">Zoek op Google</a></p>
+    </div>
+    <div class="item">
+      <h3>Cappadocië (2 dagen)</h3>
+      <p>Voor wie tijd heeft: een meerdaagse tour naar de rotsformaties en (optioneel) een luchtballonvaart bij zonsopgang — een van de bekendste ervaringen van Turkije, maar wel een aparte reis met een overnachting.</p>
+      <div class="meta"><span class="tag">2 dagen, 1 overnachting</span></div>
+      <p><a class="link" href="https://en.wikipedia.org/wiki/Cappadocia" target="_blank" rel="noopener">Wikipedia — Cappadocië</a></p>
+    </div>
+    <div class="note blue">
+      Tip: vergelijk voor je boekt kort de prijs bij de hotelbalie met een lokaal bureau in het dorp — het verschil kan aardig oplopen voor dezelfde tour. Let bij goedkope aanbiedingen op wat wél en niet inbegrepen is (lunch, drinken, entreegelden).
+    </div>
+  </div>
+</details>
+
+<details>
+  <summary>
+    <span class="title"><span class="icon">🚕</span> Vervoer</span>
+    <span class="chev">▾</span>
+  </summary>
+  <div class="body">
+    <div class="item">
+      <h3>Vanaf Antalya Airport naar het hotel</h3>
+      <p>Jullie transfer staat al vast. Los daarvan: een taxi kost normaal €60–90 en duurt 60–75 minuten (langer in het hoogseizoen).</p>
+      <p><a class="link" href="https://www.suntransfers.com/antalya-airport-to-side" target="_blank" rel="noopener">suntransfers.com — Antalya naar Side</a></p>
+    </div>
+    <div class="item">
+      <h3>Dolmuş (minibus)</h3>
+      <p>Goedkoopste manier om lokaal te reizen, bijv. tussen Evrenseki, Side centrum en Manavgat. Vertrekt zodra hij vol genoeg is, stopt vrijwel overal — steek je hand op om in te stappen, roep "stop" om eruit te gaan. Rijdt tot rond middernacht, contant betalen.</p>
+      <p><a class="link" href="https://en.wikipedia.org/wiki/Dolmu%C5%9F" target="_blank" rel="noopener">Wikipedia — dolmuş</a></p>
+    </div>
+    <div class="item">
+      <h3>Taxi</h3>
+      <p>Dag en nacht beschikbaar, iets duurder dan de dolmuş. Spreek de prijs vooraf af of vraag om de meter ("taksimetre").</p>
+      <p><a class="link" href="https://www.google.com/search?q=taxi+Side+Turkije+taksimetre" target="_blank" rel="noopener">Zoek op Google</a></p>
+    </div>
+    <div class="item">
+      <h3>Taxi-app: BiTaksi (en Uber)</h3>
+      <p>BiTaksi is de meest gebruikte taxi-app in Turkije — werkt via reguliere (gele) taxi's, toont beschikbare chauffeurs bij je in de buurt en je kunt met kaart of contant betalen. Sinds eind 2022 werkt ook Uber in de regio Antalya (via diezelfde gewone taxi's, dus geen aparte Uber-auto's), maar de dekking in kleinere plaatsen zoals Side/Manavgat/Evrenseki is wisselend — een rit bevestigd krijgen lukt niet altijd. Zie het als handig extra naast een gewone straattaxi of de hotelreceptie.</p>
+      <div class="meta">
+        <span class="tag">Dekking buiten Antalya-stad wisselend</span>
+      </div>
+      <p><a class="link" href="https://www.bitaksi.com/en" target="_blank" rel="noopener">bitaksi.com</a> · <a class="link" href="https://www.uber.com/tr/en/r/cities/taxi/antalya-antalya-tr/" target="_blank" rel="noopener">Uber Antalya</a></p>
+    </div>
+    <div class="item">
+      <h3>Uitstapjes verder weg (Antalya, Alanya)</h3>
+      <p>Een georganiseerde excursie of huurauto is comfortabeler dan de streekbus, die al snel 1,5–2 uur enkele reis duurt.</p>
+      <p><a class="link" href="https://www.google.com/search?q=huurauto+Antalya+Side+vergelijken" target="_blank" rel="noopener">Zoek op Google</a></p>
+    </div>
+  </div>
+</details>
+
+<details>
+  <summary>
+    <span class="title"><span class="icon">🍽️</span> Restaurants</span>
+    <span class="chev">▾</span>
+  </summary>
+  <div class="body">
+    <div class="item">
+      <h3>Karma Restaurant</h3>
+      <p>Modern, in Side Oude Stad met zeezicht, mix van vlees- en internationale gerechten.</p>
+      <p><a class="link" href="https://www.karmaside.com" target="_blank" rel="noopener">karmaside.com</a></p>
+    </div>
+    <div class="item">
+      <h3>Elia</h3>
+      <p>Wordt door veel bezoekers als één van de beste restaurants van Side genoemd — reserveren aangeraden.</p>
+      <p><a class="link" href="https://eliarestaurantside.com" target="_blank" rel="noopener">eliarestaurantside.com</a></p>
+    </div>
+    <div class="item">
+      <h3>Liman Restaurant Lounge Club</h3>
+      <p>Aan de haven van Side, mooi uitzicht, ontspannen sfeer.</p>
+      <p><a class="link" href="https://sideliman.com" target="_blank" rel="noopener">sideliman.com</a></p>
+    </div>
+    <div class="item">
+      <h3>Cihan Pide &amp; Kebap</h3>
+      <p>Laagdrempelig, echt Turks: pide en kebab, goede prijs-kwaliteit.</p>
+      <p><a class="link" href="https://www.tripadvisor.com/Restaurant_Review-g297968-d2326109-Reviews-Cihan_Pide_Kebap_Restaurant-Side_Manavgat_Turkish_Mediterranean_Coast.html" target="_blank" rel="noopener">Tripadvisor-pagina</a> <span style="color:var(--muted); font-size:13px;">(geen eigen website gevonden)</span></p>
+    </div>
+    <div class="item">
+      <h3>Q Beach Restaurant &amp; Lounge (Evrenseki)</h3>
+      <p>Direct aan het strand, dicht bij het hotel, Turkse/Italiaanse/internationale kaart.</p>
+      <p><a class="link" href="https://qbeachside.com" target="_blank" rel="noopener">qbeachside.com</a></p>
+    </div>
+    <div class="item">
+      <h3>Side House Café and Bar</h3>
+      <p>Bij de haven in de oude stad, breed menu, binnen en buiten zitten mogelijk.</p>
+      <p><a class="link" href="https://www.tripadvisor.com/Restaurant_Review-g297968-d8588565-Reviews-Side_House_Cafe_Bar-Side_Manavgat_Turkish_Mediterranean_Coast.html" target="_blank" rel="noopener">Tripadvisor-pagina</a> <span style="color:var(--muted); font-size:13px;">(geen eigen website gevonden)</span></p>
+    </div>
+    <div class="note blue">
+      Tip: voor lokaal en goedkoop eten (lokanta's) kun je terecht in het centrum van Manavgat of de rustigere straten van Evrenseki.
+    </div>
+  </div>
+</details>
+
+<details>
+  <summary>
+    <span class="title"><span class="icon">📌</span> Praktische links & nooddiensten</span>
+    <span class="chev">▾</span>
+  </summary>
+  <div class="body">
+    <div class="item">
+      <h3>Jullie hotel</h3>
+      <p><a class="link" href="https://dreamworldhill.com.tr/en" target="_blank" rel="noopener">Dream World Hill — officiële website</a></p>
+    </div>
+    <div class="item">
+      <h3>Reisorganisator</h3>
+      <p><a class="link" href="https://www.prijsvrij.nl" target="_blank" rel="noopener">Prijsvrij Vakanties</a> — tel. 085 2085 551</p>
+    </div>
+    <div class="item">
+      <h3>Alarmnummer Turkije</h3>
+      <p><strong>112</strong> — algemeen Europees noodnummer (politie, ambulance, brandweer), werkt ook in Turkije.</p>
+      <div class="meta">
+        <span class="tag">Politie: 155</span>
+        <span class="tag">Brandweer: 110</span>
+        <span class="tag">Verkeerspolitie: 154</span>
+      </div>
+      <p><a class="link" href="https://europa.eu/youreurope/citizens/travel/security-and-emergencies/emergency/index_nl.htm" target="_blank" rel="noopener">europa.eu — over het 112-alarmnummer</a></p>
+    </div>
+    <div class="item">
+      <h3>Nederlands honorair consulaat Antalya</h3>
+      <p>Voor hulp bij verlies van paspoort of ernstige problemen. Actuele adresgegevens en telefoonnummer:</p>
+      <p><a class="link" href="https://www.netherlandsandyou.nl/web/turkiye/about-us/honorary-consul-antalya" target="_blank" rel="noopener">netherlandsandyou.nl — honorair consul Antalya</a></p>
+    </div>
+    <div class="item">
+      <h3>Nederlandse ambassade Ankara (noodgevallen)</h3>
+      <p>Noodlijn: +90 532 233 5330</p>
+      <p><a class="link" href="https://www.netherlandsandyou.nl/web/turkiye" target="_blank" rel="noopener">netherlandsandyou.nl — Nederland in Turkije</a></p>
+    </div>
+  </div>
+</details>
+
+<p class="footnote note">
+  Reistijden zijn indicaties (afhankelijk van verkeer en vertrekpunt) en prijzen/openingstijden wisselen per seizoen. Check vlak voor vertrek de actuele info bij de excursiebalie van het hotel of online.
+</p>
+
+<a class="backlink" href="index.html">← Terug naar de aftelklok</a>
+
+</div>
+
+<script>
+  function applyTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    document.getElementById('themeToggle').textContent = theme === 'dark' ? '☀️' : '🌙';
+  }
+  function toggleTheme() {
+    const current = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+    const next = current === 'dark' ? 'light' : 'dark';
+    applyTheme(next);
+    try { localStorage.setItem('theme', next); } catch (e) {}
+  }
+  (function () {
+    let saved = null;
+    try { saved = localStorage.getItem('theme'); } catch (e) {}
+    if (!saved) {
+      saved = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+    applyTheme(saved);
+  })();
+</script>
+</body>
+</html>

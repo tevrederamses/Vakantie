@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Reisgegevens — Side, Turkije</title>
+<style>
+  :root {
+    --bg: #f3f6f8;
+    --card: #ffffff;
+    --text: #17202a;
+    --muted: #5c6772;
+    --accent: #0093E9;
+    --accent-dark: #0072b8;
+    --line: #e5e9ed;
+    --item-text: #333c45;
+    --note-bg: #fff8e6;
+    --note-text: #6b5600;
+    --note-blue-bg: #eef5ff;
+    --note-blue-text: #0a3d66;
+    --tag-bg: #eef5ff;
+    --shadow: rgba(0,0,0,0.06);
+  }
+  html[data-theme="dark"] {
+    --bg: #12161b;
+    --card: #1c2128;
+    --text: #e7ebef;
+    --muted: #9aa4ae;
+    --accent: #4db8ff;
+    --accent-dark: #7cc9ff;
+    --line: #2c333b;
+    --item-text: #c9d1d9;
+    --note-bg: #3a2f10;
+    --note-text: #f0d78a;
+    --note-blue-bg: #17293a;
+    --note-blue-text: #a9d4ff;
+    --tag-bg: #17293a;
+    --shadow: rgba(0,0,0,0.35);
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    color: var(--text);
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+  .hero {
+    position: relative;
+    padding: 40px 20px 34px;
+    text-align: center;
+    color: white;
+    background:
+      linear-gradient(180deg, rgba(0,40,60,0.55) 0%, rgba(0,40,60,0.8) 100%),
+      url('https://dreamworldhill.com.tr/assets/images/Dream_World_Hill_Family_Club_Beach_2.webp') center center / cover no-repeat;
+  }
+  .hero h1 { margin: 0 0 6px; font-size: clamp(22px, 6vw, 32px); }
+  .hero p { margin: 0; opacity: 0.92; font-size: clamp(13px, 3.5vw, 15px); }
+  .nav { display: flex; justify-content: center; gap: 16px; margin-top: 16px; flex-wrap: wrap; }
+  .nav a { color: white; text-decoration: underline; font-size: 14px; opacity: 0.95; }
+  .wrap { max-width: 720px; margin: -18px auto 0; padding: 0 14px 50px; position: relative; }
+
+  details {
+    background: var(--card);
+    border-radius: 16px;
+    margin: 10px 0;
+    box-shadow: 0 3px 12px var(--shadow);
+    overflow: hidden;
+  }
+  summary {
+    list-style: none;
+    cursor: pointer;
+    padding: 16px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    font-weight: 700;
+    font-size: 16px;
+    -webkit-tap-highlight-color: transparent;
+  }
+  summary::-webkit-details-marker { display: none; }
+  summary .icon { font-size: 19px; }
+  summary .title { flex: 1; display:flex; align-items:center; gap:10px; }
+  summary .chev { color: var(--muted); font-size: 14px; transition: transform 0.2s ease; flex: none; }
+  details[open] summary .chev { transform: rotate(180deg); }
+  details[open] summary { border-bottom: 1px solid var(--line); }
+
+  .body { padding: 4px 18px 14px; }
+  .item { border-top: 1px solid var(--line); padding: 12px 0; }
+  .item:first-of-type { border-top: 0; }
+  .item h3 { margin: 0 0 4px; font-size: 15.5px; }
+  .item p { margin: 0 0 6px; font-size: 14.5px; line-height: 1.55; color: var(--item-text); }
+  .meta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+  .tag { background: var(--tag-bg); color: var(--accent-dark); font-size: 12.5px; font-weight: 600; padding: 4px 10px; border-radius: 99px; }
+  .note { margin: 10px 0; padding: 12px 13px; border-radius: 12px; background: var(--note-bg); font-size: 13.5px; line-height: 1.5; color: var(--note-text); }
+  .note.blue { background: var(--note-blue-bg); color: var(--note-blue-text); }
+  .theme-toggle {
+    position: fixed; top: 14px; right: 14px; z-index: 10;
+    background: rgba(255,255,255,0.18); backdrop-filter: blur(6px);
+    border: none; color: white; width: 40px; height: 40px; border-radius: 50%;
+    font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center;
+    -webkit-tap-highlight-color: transparent;
+  }
+  a.link { color: var(--accent-dark); font-weight: 600; text-decoration: none; }
+  a.link:hover { text-decoration: underline; }
+  .backlink { display: block; text-align: center; margin: 20px 0 10px; color: var(--accent-dark); text-decoration: none; font-size: 14px; }
+  .footnote { max-width: 720px; margin: 6px auto 0; font-size: 13px; }
+  table.flighttable { width: 100%; border-collapse: collapse; margin-top: 6px; font-size: 13.5px; }
+  table.flighttable td, table.flighttable th { padding: 4px 6px; text-align: left; border-bottom: 1px solid var(--line); }
+  table.flighttable th { color: var(--muted); font-weight: 600; }
+</style>
+</head>
+<body>
+
+<button class="theme-toggle" id="themeToggle" aria-label="Wissel donker/licht" onclick="toggleTheme()">🌙</button>
+
+<div class="hero">
+  <h1>📋 Reisgegevens</h1>
+  <p>Vluchten, bagage, transfer & boekingsdetails — R-6448725</p>
+  <div class="nav">
+    <a href="index.html">⏱ Aftelklok</a>
+    <a href="inpakchecklist.html">📋 Inpakchecklist</a>
+    <a href="omgeving.html">🗺️ Side & omgeving</a>
+  </div>
+</div>
+
+<div class="wrap">
+
+<details open>
+  <summary>
+    <span class="title"><span class="icon">✈️</span> Vluchten</span>
+    <span class="chev">▾</span>
+  </summary>
+  <div class="body">
+    <div class="item">
+      <h3>Heenreis — 18 september 2026</h3>
+      <table class="flighttable">
+        <tr><th>Van</th><td>Eindhoven (EIN)</td></tr>
+        <tr><th>Naar</th><td>Antalya (AYT)</td></tr>
+        <tr><th>Vertrek</th><td>10:25</td></tr>
+        <tr><th>Aankomst</th><td>15:25 (lokale tijd)</td></tr>
+        <tr><th>Maatschappij</th><td>TUI fly Netherlands</td></tr>
+        <tr><th>Vluchtnummer</th><td>OR 3043</td></tr>
+        <tr><th>Klasse</th><td>Economy</td></tr>
+        <tr><th>Stoelen</th><td>20A (Ramses) · 20B (Conchata) — gereserveerd, €15 p.p.</td></tr>
+      </table>
+      <p><a class="link" href="https://www.tui.nl" target="_blank" rel="noopener">tui.nl</a></p>
+    </div>
+    <div class="item">
+      <h3>Terugreis — 26 september 2026</h3>
+      <table class="flighttable">
+        <tr><th>Van</th><td>Antalya (AYT)</td></tr>
+        <tr><th>Naar</th><td>Eindhoven (EIN)</td></tr>
+        <tr><th>Vertrek</th><td>06:10</td></tr>
+        <tr><th>Aankomst</th><td>09:15 (lokale tijd)</td></tr>
+        <tr><th>Maatschappij</th><td>SunExpress</td></tr>
+        <tr><th>Vluchtnummer</th><td>XQ 546</td></tr>
+        <tr><th>Klasse</th><td>Economy Light</td></tr>
+      </table>
+      <p><a class="link" href="https://www.sunexpress.com" target="_blank" rel="noopener">sunexpress.com</a></p>
+    </div>
+    <div class="note blue">
+      Check online in vanaf 24 tot 1 uur voor vertrek (indien mogelijk) — dat scheelt wachtrijen op de luchthaven. Controleer bij het inchecken of voornaam, achternaam en geboortedatum exact overeenkomen met je paspoort.
+    </div>
+    <div class="note">
+      Vluchttijden zijn onder voorbehoud en kunnen tot 24 uur voor vertrek wijzigen, zelfs na bevestiging. Controleer je reisbescheiden vlak voor vertrek nog even.
+    </div>
+  </div>
+</details>
+
+<details>
+  <summary>
+    <span class="title"><span class="icon">🧳</span> Bagage</span>
+    <span class="chev">▾</span>
+  </summary>
+  <div class="body">
+    <div class="item">
+      <h3>Heenreis (TUI fly)</h3>
+      <p>Persoonlijk item van 40×30×20 cm per persoon inbegrepen. Ruimbagage is niet standaard inbegrepen — die is apart bijgeboekt (zie hieronder).</p>
+    </div>
+    <div class="item">
+      <h3>Terugreis (SunExpress)</h3>
+      <p>4 kg handbagage per persoon inbegrepen.</p>
+    </div>
+    <div class="item">
+      <h3>Bijgeboekte ruimbagage</h3>
+      <p>20 kg retour per persoon, voor zowel Ramses als Conchata (totaal 2× 20 kg, geldig voor heen- én terugreis).</p>
+    </div>
+    <div class="note blue">
+      Tip: check vlak voor vertrek de exacte regels van TUI fly en SunExpress voor afmetingen en gewicht — een kleine overschrijding kan op de luchthaven extra kosten.
+    </div>
+  </div>
+</details>
+
+<details>
+  <summary>
+    <span class="title"><span class="icon">🚌</span> Transfer</span>
+    <span class="chev">▾</span>
+  </summary>
+  <div class="body">
+    <div class="item">
+      <h3>Transfer vliegveld ↔ hotel</h3>
+      <p>Bijgeboekt: StandardShuttle, voor zowel de heen- als terugreis, tussen Antalya Airport en Dream World Hill.</p>
+    </div>
+  </div>
+</details>
+
+<details>
+  <summary>
+    <span class="title"><span class="icon">🛎️</span> In- en uitchecken hotel</span>
+    <span class="chev">▾</span>
+  </summary>
+  <div class="body">
+    <div class="item">
+      <h3>Inchecken</h3>
+      <p>Meestal tussen 15:00 en 16:00 uur. Eerder inchecken kan, afhankelijk van beschikbaarheid — bagage kan vaak al eerder worden neergezet.</p>
+    </div>
+    <div class="item">
+      <h3>Uitchecken</h3>
+      <p>Meestal tussen 10:00 en 12:00 uur. Op de vertrekdag (26 september) kun je, afhankelijk van de checkout-tijd, nog gebruikmaken van je kamer tot vertrek.</p>
+    </div>
+    <div class="item">
+      <h3>Faciliteiten in het laagseizoen</h3>
+      <p>Bepaalde faciliteiten zoals restaurants, zwembaden en glijbanen kunnen in het voor- of naseizoen beperkt geopend zijn.</p>
+    </div>
+    <div class="item">
+      <h3>Geen reisleiding ter plaatse</h3>
+      <p>Sunmix (de reisorganisator) heeft geen reisleiding op de bestemming zelf, maar is wel 24/7 telefonisch bereikbaar voor vragen of hulp tijdens de reis.</p>
+      <p><a class="link" href="https://www.prijsvrij.nl" target="_blank" rel="noopener">prijsvrij.nl</a> — tel. 085 2085 551</p>
+    </div>
+  </div>
+</details>
+
+<details>
+  <summary>
+    <span class="title"><span class="icon">🛡️</span> Verzekeringen</span>
+    <span class="chev">▾</span>
+  </summary>
+  <div class="body">
+    <div class="item">
+      <h3>Reisverzekering</h3>
+      <p>Afgesloten voor beide reizigers: Reisverzekering Combinatie B (Europa), via Allianz Assistance.</p>
+      <p><a class="link" href="https://www.allianz-assistance.nl" target="_blank" rel="noopener">allianz-assistance.nl</a> — tel. 020 561 8711 (vermeld achternaam + dat de verzekering via Prijsvrij Vakanties is afgesloten)</p>
+    </div>
+    <div class="item">
+      <h3>Annuleringsverzekering</h3>
+      <p>Niet afgesloten voor deze boeking.</p>
+    </div>
+  </div>
+</details>
+
+<details>
+  <summary>
+    <span class="title"><span class="icon">📄</span> Boekingsgegevens</span>
+    <span class="chev">▾</span>
+  </summary>
+  <div class="body">
+    <div class="item">
+      <h3>Reservering</h3>
+      <p>Reserveringsnummer: R-6448725 · Reisorganisator: Sunmix · Boeking via Prijsvrij Vakanties</p>
+      <div class="meta">
+        <span class="tag">18–26 sept 2026, 9 dagen</span>
+        <span class="tag">2 personen</span>
+        <span class="tag">All inclusive</span>
+      </div>
+    </div>
+    <div class="item">
+      <h3>TUI fly Services</h3>
+      <p>Boekingsnummer: 200064165962 (stoelreservering heenvlucht)</p>
+    </div>
+    <div class="item">
+      <h3>Totaalprijs</h3>
+      <p>€2.584,50 voor 2 personen, reeds volledig betaald via iDEAL.</p>
+    </div>
+    <div class="item">
+      <h3>Contact hoofdboeker</h3>
+      <p>Ramses te Vrede — Veenendaalplein 89, 1106CP Amsterdam</p>
+    </div>
+  </div>
+</details>
+
+<p class="footnote note">
+  Deze gegevens komen uit de boekingsbevestiging (R-6448725) en de TUI fly Services-bevestiging. Controleer bij twijfel altijd de originele documenten of neem contact op met Prijsvrij Vakanties.
+</p>
+
+<a class="backlink" href="index.html">← Terug naar de aftelklok</a>
+
+</div>
+
+<script>
+  function applyTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    document.getElementById('themeToggle').textContent = theme === 'dark' ? '☀️' : '🌙';
+  }
+  function toggleTheme() {
+    const current = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+    const next = current === 'dark' ? 'light' : 'dark';
+    applyTheme(next);
+    try { localStorage.setItem('theme', next); } catch (e) {}
+  }
+  (function () {
+    let saved = null;
+    try { saved = localStorage.getItem('theme'); } catch (e) {}
+    if (!saved) {
+      saved = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+    applyTheme(saved);
+  })();
+</script>
+</body>
+</html>
